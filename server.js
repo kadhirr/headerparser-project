@@ -1,7 +1,3 @@
-// server.js
-// where your node app starts
-
-// init project
 require('dotenv').config();
 var express = require('express');
 var app = express();
@@ -19,15 +15,21 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-
-// your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
-});
-
+// Use req.ip for the IP address
+// Use req.get() to get the necessary request header field
+app.get('/api/whoami', function(req,res){
+  console.log(req.ip, req.get('user-agent'), req.get('accept-language'));
+  let respObj = {
+    ipaddress: req.ip,
+    language: req.get('accept-language'),
+    software: req.get('user-agent')
+  }
+  res.json(respObj);
+})
 
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
+//use process.env.PORT for port
+var listener = app.listen(3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
